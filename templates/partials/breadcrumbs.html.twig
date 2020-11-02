@@ -3,7 +3,7 @@
 {% set divider = breadcrumbs_config.icon_divider_classes %}
 
 {% if crumbs|length > 1 or breadcrumbs_config.show_all %}
-<div id="breadcrumbs" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
+<div id="breadcrumbs">
     {% if breadcrumbs_config.icon_home %}
     <i class="{{ breadcrumbs_config.icon_home }}"></i>
     {% endif %}
@@ -23,5 +23,21 @@
             {% endif %}
         {% endif %}
     {% endfor %}
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+            {% for crumb in crumbs %}
+            {
+                "@type": "ListItem",
+                "position": {{ loop.index }},
+                "name": "{{ crumb.menu }}",
+                "item": "{{ crumb.url }}"
+            }{% if not loop.last %},{% endif %}
+            {%  endfor %}
+          ]
+        }
+    </script>
 </div>
 {% endif %}
